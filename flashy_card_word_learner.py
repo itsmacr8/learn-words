@@ -5,12 +5,38 @@ import pandas
 
 # <---------------------------- CONSTANTS and VARIABLES -------------------------------> #
 
-FONT = ('Arial', 40, 'normal')
+WINDOW = Tk()
 ALIGNMENT = 'center'
 BLACK = 'black'
 WHITE = 'white'
 NUM_OF_WEEK = dt.datetime.now().weekday()
 DIRPATH = os.path.dirname(__file__)
+PAD = 50
+DEVICE_WIDTH = WINDOW.winfo_screenwidth()
+
+if DEVICE_WIDTH < 800:
+    FONT = ('Arial', 20, 'normal')
+    CANVAS_WIDTH = 300
+    CANVAS_HEIGHT = 200
+    TEXT_HORIZONTAL = 150
+    CANVAS_IMAGE = 100
+    TITLE_TEXT = 90
+    WORD_TEXT = 130
+    BUTTON_SIZE = 60
+    WRONG_IMAGE = 'partials/images/wrong-small.png'
+    RIGHT_IMAGE = 'partials/images/right-small.png'
+else:
+    FONT = ('Arial', 40, 'normal')
+    CANVAS_WIDTH = 600
+    CANVAS_HEIGHT = 400
+    TEXT_HORIZONTAL = 300
+    CANVAS_IMAGE = 200
+    TITLE_TEXT = 130
+    WORD_TEXT = 230
+    BUTTON_SIZE = 100
+    WRONG_IMAGE = 'partials/images/wrong.png'
+    RIGHT_IMAGE = 'partials/images/right.png'
+
 
 flip_time = 3000
 current_word_index = 0
@@ -35,7 +61,7 @@ def next_words():
     """Shows the next word from the _english_words.csv or _words_to_learn.csv file. If user plays this application for the first time then he will see the words from _french_words.csv otherwise from the _words_to_learn.csv file."""
     global current_word, flip_word_timer
     # cancel the timer so that it does not call the flip_word function if user clicks on the wrong or right button continuously. When user stop clicking on the buttons then he will see the answer for that word.
-    window.after_cancel(flip_word_timer)
+    WINDOW.after_cancel(flip_word_timer)
 
     # To handle the error when user learns or visits all the words.
     try:
@@ -45,11 +71,11 @@ def next_words():
         fix_error()
         return
     english_word = current_word['English']
-    canvas.itemconfig(canvas_image, image=white_img)
+    canvas.itemconfig(canvas_image, image=white_image)
     canvas.itemconfig(title_text, fill=BLACK, text='English')
     canvas.itemconfig(word_text, fill=BLACK,  text=english_word)
     # set the flip_word_timer back to 3 seconds when user clicks on the wrong or right button.
-    flip_word_timer = window.after(flip_time, flip_word)
+    flip_word_timer = WINDOW.after(flip_time, flip_word)
 
 
 def known_words():
@@ -77,7 +103,7 @@ def unknown_words():
 def flip_word():
     """Change the background and text color when user sees the translated word."""
     bangali_word = current_word['Bangali']
-    canvas.itemconfig(canvas_image, image=purple_img)
+    canvas.itemconfig(canvas_image, image=purple_image)
     canvas.itemconfig(title_text, fill=WHITE, text='Bangali')
     canvas.itemconfig(word_text,  fill=WHITE, text=bangali_word)
 
@@ -111,33 +137,28 @@ total_words = words.to_dict(orient='records')
 
 # <---------------------------- UI SETUP -------------------------------> #
 
-window = Tk()
-window.title('Flashy card app')
-window.config(padx=50, pady=50, bg='#B1DDC6')
+WINDOW.title('Flashy card app')
+WINDOW.config(padx=PAD, pady=PAD, bg='#B1DDC6')
 
 # Call the flip_word function after 3 seconds
-flip_word_timer = window.after(flip_time, flip_word)
+flip_word_timer = WINDOW.after(flip_time, flip_word)
 
-canvas = Canvas(width=600, height=400, highlightthickness=0)
-white_image = filepath('partials/images/white.png')
-white_img = PhotoImage(file=white_image)
-purple_image = filepath('partials/images/purple.png')
-purple_img = PhotoImage(file=purple_image)
-canvas_image = canvas.create_image(300, 200)
-title_text = canvas.create_text(300, 130, font=FONT)
-word_text = canvas.create_text(300, 230, font=FONT)
+canvas = Canvas(width=CANVAS_WIDTH, height=CANVAS_HEIGHT, highlightthickness=0)
+white_image = PhotoImage(file=filepath('partials/images/white.png'))
+purple_image = PhotoImage(file=filepath('partials/images/purple.png'))
+canvas_image = canvas.create_image(TEXT_HORIZONTAL, CANVAS_IMAGE)
+title_text = canvas.create_text(TEXT_HORIZONTAL, TITLE_TEXT, font=FONT)
+word_text = canvas.create_text(TEXT_HORIZONTAL, WORD_TEXT, font=FONT)
 canvas.grid(row=0, column=0, columnspan=2, pady=20)
 
-wrong_image = filepath('partials/images/wrong.png')
-wrong_button_image = PhotoImage(file=wrong_image)
-wrong_button = Button(image=wrong_button_image, command=unknown_words)
+wrong_image = PhotoImage(file=filepath(WRONG_IMAGE), width=BUTTON_SIZE, height=BUTTON_SIZE)
+wrong_button = Button(image=wrong_image, command=unknown_words)
 wrong_button.grid(row=1, column=0)
 
-right_image = filepath('partials/images/right.png')
-right_button_image = PhotoImage(file=right_image)
-right_button = Button(image=right_button_image, command=known_words)
+right_image = PhotoImage(file=filepath(RIGHT_IMAGE), width=BUTTON_SIZE, height=BUTTON_SIZE)
+right_button = Button(image=right_image, command=known_words)
 right_button.grid(row=1, column=1)
 
 
 next_words()
-window.mainloop()
+WINDOW.mainloop()
