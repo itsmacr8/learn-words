@@ -11,31 +11,17 @@ BLACK = 'black'
 WHITE = 'white'
 NUM_OF_WEEK = dt.datetime.now().weekday()
 DIRPATH = os.path.dirname(__file__)
-PAD = 50
-DEVICE_WIDTH = WINDOW.winfo_screenwidth()
-
-if DEVICE_WIDTH < 800:
-    FONT = ('Arial', 20, 'normal')
-    CANVAS_WIDTH = 300
-    CANVAS_HEIGHT = 200
-    TEXT_HORIZONTAL = 150
-    CANVAS_IMAGE = 100
-    TITLE_TEXT = 90
-    WORD_TEXT = 130
-    BUTTON_SIZE = 60
-    WRONG_IMAGE = 'partials/images/wrong-small.png'
-    RIGHT_IMAGE = 'partials/images/right-small.png'
-else:
-    FONT = ('Arial', 40, 'normal')
-    CANVAS_WIDTH = 600
-    CANVAS_HEIGHT = 400
-    TEXT_HORIZONTAL = 300
-    CANVAS_IMAGE = 200
-    TITLE_TEXT = 130
-    WORD_TEXT = 230
-    BUTTON_SIZE = 100
-    WRONG_IMAGE = 'partials/images/wrong.png'
-    RIGHT_IMAGE = 'partials/images/right.png'
+PAD = 40
+FONT = ('Arial', 25, 'normal')
+CANVAS_WIDTH = 350
+CANVAS_HEIGHT = 180
+TEXT_HORIZONTAL = 175
+CANVAS_IMAGE = 150
+TITLE_TEXT = 70
+WORD_TEXT = 120
+BUTTON_SIZE = 60
+WRONG_IMAGE = 'partials/images/wrong-small.png'
+RIGHT_IMAGE = 'partials/images/right-small.png'
 
 
 flip_time = 3000
